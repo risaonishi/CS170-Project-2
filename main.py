@@ -43,12 +43,12 @@ def backward_elimination(data):
             accuracy = leave_one_out_cross_validation(data, set_without_k, [])  # Evaluate accuracy
             print(f"      Using feature(s) {set(set_without_k)} accuracy is {accuracy*100:.1f}%")
             
-            if accuracy > best_so_far_accuracy:  # Update the feature to remove if accuracy improves
+            if accuracy > best_so_far_accuracy:  # Update the set with feature removed if accuracy improves
                 best_so_far_accuracy = accuracy
                 set_with_best_k_removed = set_without_k
         
         current_set_of_features = set_with_best_k_removed  # Remove the feature
-        print(f"Feature set {set(current_set_of_features)} was best (removed feature{k}), accuracy is {best_so_far_accuracy*100:.1f}%")
+        print(f"Feature set {set(current_set_of_features)} was best, accuracy is {best_so_far_accuracy*100:.1f}%")
         
         if best_so_far_accuracy > best_overall_accuracy:
             best_overall_accuracy = best_so_far_accuracy
@@ -59,8 +59,8 @@ def leave_one_out_cross_validation(data, current_set, feature_to_add):
     number_correctly_classified = 0
     features_to_consider = current_set + feature_to_add  
     for i in range(data.shape[0]):  # Loop through each object in the dataset
-        object_to_classify = data[i, features_to_consider]  # The object we are trying to classify
-        label_object_to_classify = data[i][0]  # The true label of the object
+        object_to_classify = data[i, features_to_consider]  
+        label_object_to_classify = data[i][0]  # The actual label of the object
 
         nearest_neighbor_distance = float('inf')  
         nearest_neighbor_location = float('inf')  
@@ -77,7 +77,7 @@ def leave_one_out_cross_validation(data, current_set, feature_to_add):
     return accuracy
 
 def main():
-    print("Welcome to Risa Onishi's Feature Selection Algorithm.\n")
+    print("Welcome to Risa Onishi's Feature Selection Algorithm.")
     filename = input("Type in the name of the file to test : ").strip()  # User input for dataset file name, without any accidental whitespace
 
     filepath = f"data/{filename}"
@@ -102,9 +102,7 @@ def main():
         forward_selection(data_array)
     elif algorithm == '2':
         backward_elimination(data_array)
-    else:
-        print("Invalid input, please type 1 or 2.")
-        return
+
     end_time = time.time()
     elapsed_time = end_time - start_time  # Calculate elapsed time
     print(f"Time taken: {elapsed_time:.2f} seconds")
